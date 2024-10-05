@@ -4,13 +4,18 @@ import * as THREE from 'three';
 export function createTextSprite(message) {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
-  const fontSize = 64;  // Even larger font size for more visibility
+  const fontSize = 18;  // Font size
 
-  // Set canvas size based on text width and height
+  // Set the font for text measurement
   context.font = `bold ${fontSize}px Arial`;
-  const textWidth = context.measureText(message).width;
-  canvas.width = textWidth + 40; // Add some padding
-  canvas.height = fontSize + 20; // Adjust height based on font size
+
+  // Split the message into lines where there are \n
+  const lines = message.split('\n');
+
+  // Calculate canvas size based on the widest line of text and total number of lines
+  const textWidth = Math.max(...lines.map(line => context.measureText(line).width));
+  canvas.width = textWidth + 40;  // Add padding
+  canvas.height = fontSize * lines.length + 20;  // Adjust height based on number of lines
 
   // Ensure a transparent background
   context.clearRect(0, 0, canvas.width, canvas.height);
@@ -24,8 +29,10 @@ export function createTextSprite(message) {
   context.textAlign = 'center';  // Center-align the text horizontally
   context.textBaseline = 'middle';  // Center-align vertically
 
-  // Draw the text on the canvas (centered)
-  context.fillText(message, canvas.width / 2, canvas.height / 2);  // Center text in the canvas
+  // Draw each line of the message
+  lines.forEach((line, i) => {
+    context.fillText(line, canvas.width / 2, (fontSize * (i + 1)) + 10);  // Adjust line spacing
+  });
 
   // Create texture and sprite material from the canvas
   const texture = new THREE.CanvasTexture(canvas);
@@ -40,3 +47,4 @@ export function createTextSprite(message) {
 
   return sprite;
 }
+

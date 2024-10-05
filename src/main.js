@@ -119,24 +119,34 @@ async function main() {
     comets_data.forEach((comet) => {
       const cometPos = calculateCometPosition(comet, time);
       comet.comet_object.position.copy(cometPos);
-      comet.story_sprite.position.copy(cometPos.clone().add(new THREE.Vector3(0, 0.2, 0))); // Position the story above the comet
+      comet.story_sprite.position.copy(cometPos.clone().add(new THREE.Vector3(0, 0.2, -0.2))); // Position the story above the comet
 
       // Update the story if the comet is being followed
       if (comet === selectedComet) {
         comet.timer += 0.01;
-        if (comet.timer >= 2) {  // Change story every 2 seconds
+        if (comet.timer >= 5) {  // Change story every 5 seconds
           comet.timer = 0;
           comet.storyIndex++;
           const storyKey = `story_${comet.storyIndex}`;
           if (comet[storyKey]) {
-            comet.story_sprite.visible = true;
-            comet.story_sprite.text = comet[storyKey];
+            // Remove the old text sprite
+            scene.remove(comet.story_sprite);
+
+            // Generate a new text sprite with the updated text
+            const newStoryText = createTextSprite(comet[storyKey]);
+            scene.add(newStoryText);
+
+            // Position the new text sprite and make it visible
+            newStoryText.position.copy(comet.comet_object.position.clone().add(new THREE.Vector3(0, 0.2, 0)));
+            comet.story_sprite = newStoryText;  // Replace the old story sprite
           } else {
             // If no more stories, stop following the comet and zoom out
             selectedComet = null;
             comet.story_sprite.visible = false;
             camera.position.copy(originalCameraPosition);  // Reset camera position
             controls.enabled = true;  // Re-enable orbit controls
+            comet.storyIndex = 0;
+            comet.timer = 0;
           }
         }
       }
@@ -148,7 +158,6 @@ async function main() {
       controls.enabled = false;
       // Get the position of the comet
       const cometPos = selectedComet.comet_object.position;
-      console.log("here", cometPos);
 
       // Calculate a target position for the camera
       // Move the camera to a position slightly above and in front of the comet
