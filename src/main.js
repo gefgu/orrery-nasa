@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { calculateCometPosition, calculateOrbitPoints } from './kepler_orbit.js';  // Import the Kepler function
 import { getCometsData } from './comets_handler.js';
+import { createTextSprite } from "./texts_handler.js"
 
 async function main() {
   // Scene, Camera, Renderer
@@ -16,8 +17,8 @@ async function main() {
   controls.enableDamping = true;
 
   // Space background
-  const spaceTexture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/starfield.jpg');
-  scene.background = spaceTexture;
+  // const spaceTexture = new THREE.TextureLoader().load('./starmap_2020_4k_print');
+  scene.background = new THREE.Color(0x000000);  // Black color;
 
   // Earth setup (same as before)
   const earthTexture = new THREE.TextureLoader().load('./8081_earthmap2k.jpg');
@@ -60,7 +61,12 @@ async function main() {
     const orbitLine = new THREE.Line(orbitGeometry, orbitMaterial);
     scene.add(orbitLine);
 
-    return { "comet_object": comet, ...c };
+    // Create sprite for story_0
+    const storyText = createTextSprite(c.story_0);
+    scene.add(storyText);
+    storyText.visible = false; // Start invisible
+
+    return { "comet_object": comet, story_sprite: storyText, timer: 0, showStory: false, ...c };
   });
 
 
@@ -77,11 +83,20 @@ async function main() {
 
     // Rotate Earth
     earth.rotation.y += 0.005;
-    // Update comet position based on Kepler parameters
+    // Update comet positions
     comets_data.forEach((comet) => {
       const cometPos = calculateCometPosition(comet, time);
-      comet["comet_object"].position.copy(cometPos);
-    })
+      comet.comet_object.position.copy(cometPos);
+      comet.story_sprite.position.copy(cometPos.clone().add(new THREE.Vector3(0, 0.2, 0))); // Position the story above the comet
+
+      // Story timer logic: show for 2s every 5s
+      comet.timer += 0.01;
+      if (comet.timer >= 1) {
+        comet.timer = 0; // Reset timer after 5 seconds
+        comet.showStory = !comet.showStory; // Toggle story visibility
+      }
+      comet.story_sprite.visible = comet.showStory && comet.timer < 2; // Show for the first 2 seconds
+    });
     // Increment time
     time += 0.01;
 
