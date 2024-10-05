@@ -4,6 +4,21 @@ import { calculateCometPosition, calculateOrbitPoints } from './kepler_orbit.js'
 import { getCometsData } from './comets_handler.js';
 import { createTextSprite } from "./texts_handler.js";
 
+
+function add_lights(scene) {
+  // Lighting (same as before)
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+  scene.add(ambientLight);
+
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+  directionalLight.position.set(5, 3, 5);
+  scene.add(directionalLight);
+
+  const pointLight = new THREE.PointLight(0xffffff, 1.2);
+  pointLight.position.set(3, 0, 5);
+  scene.add(pointLight);
+}
+
 async function main() {
   // Scene, Camera, Renderer
   const scene = new THREE.Scene();
@@ -30,17 +45,9 @@ async function main() {
   const earth = new THREE.Mesh(earthGeometry, earthMaterial);
   scene.add(earth);
 
-  // Lighting (same as before)
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-  scene.add(ambientLight);
+  add_lights(scene);
 
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-  directionalLight.position.set(5, 3, 5);
-  scene.add(directionalLight);
 
-  const pointLight = new THREE.PointLight(0xffffff, 1.2);
-  pointLight.position.set(3, 0, 5);
-  scene.add(pointLight);
 
   let comets_data = await getCometsData();
   comets_data = comets_data.map((c) => {
