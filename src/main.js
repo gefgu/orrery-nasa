@@ -33,6 +33,24 @@ function add_earth(scene) {
   return earth
 }
 
+function create_comet(c, scene) {
+  const cometGeometry = new THREE.SphereGeometry(0.1, 16, 16);
+  const cometMaterial = new THREE.MeshStandardMaterial({ color: 0xffd700 });
+  const comet = new THREE.Mesh(cometGeometry, cometMaterial);
+
+  // Add each comet to the scene
+  scene.add(comet);
+
+  // Create the comet's orbit line using calculated points
+  const orbitPoints = calculateOrbitPoints(c);
+  const orbitGeometry = new THREE.BufferGeometry().setFromPoints(orbitPoints);
+  const orbitMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+  const orbitLine = new THREE.Line(orbitGeometry, orbitMaterial);
+  scene.add(orbitLine);
+
+  return { comet_object: comet, timer: 0, storyIndex: 0, showStory: false, ...c };
+}
+
 async function main() {
   // Scene, Camera, Renderer
   const scene = new THREE.Scene();
@@ -52,26 +70,10 @@ async function main() {
 
   add_lights(scene);
 
-
-
   let comets_data = await getCometsData();
-  comets_data = comets_data.map((c) => {
-    const cometGeometry = new THREE.SphereGeometry(0.1, 16, 16);
-    const cometMaterial = new THREE.MeshStandardMaterial({ color: 0xffd700 });
-    const comet = new THREE.Mesh(cometGeometry, cometMaterial);
-
-    // Add each comet to the scene
-    scene.add(comet);
-
-    // Create the comet's orbit line using calculated points
-    const orbitPoints = calculateOrbitPoints(c, 200);
-    const orbitGeometry = new THREE.BufferGeometry().setFromPoints(orbitPoints);
-    const orbitMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-    const orbitLine = new THREE.Line(orbitGeometry, orbitMaterial);
-    scene.add(orbitLine);
-
-    return { comet_object: comet, timer: 0, storyIndex: 0, showStory: false, ...c };
-  });
+  comets_data = comets_data.map((c) =>
+    create_comet(c, scene)
+  );
 
   // Camera positioning
   camera.position.set(5, 3, 7);
