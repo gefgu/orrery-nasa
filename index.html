@@ -12,17 +12,15 @@
         }
       }
     </script>
-    <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-      }
-      canvas {
-        display: block;
-      }
-    </style>
+    <link href="/src/style.css" rel="stylesheet" />
   </head>
-  <body>
+  <body class="bg-black">
+    <div
+      id="comet-story"
+      class="absolute top-10 left-10 p-5 bg-black/70 text-white font-sans rounded-lg hidden w-lg text-center max-w-lg border border-gray-50"
+    >
+      <p id="story-text"></p>
+    </div>
     <script type="module" src="./src/main.js"></script>
   </body>
 </html>
