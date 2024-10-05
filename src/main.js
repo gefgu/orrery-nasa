@@ -19,6 +19,20 @@ function add_lights(scene) {
   scene.add(pointLight);
 }
 
+function add_earth(scene) {
+  // Earth setup (same as before)
+  const earthTexture = new THREE.TextureLoader().load('./8081_earthmap2k.jpg');
+  const earthNormalMap = new THREE.TextureLoader().load('https://threejs.org/examples/textures/earth_normal_2048.jpg');
+  const earthGeometry = new THREE.SphereGeometry(1, 32, 32);
+  const earthMaterial = new THREE.MeshStandardMaterial({
+    map: earthTexture,
+    normalMap: earthNormalMap,
+  });
+  const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+  scene.add(earth);
+  return earth
+}
+
 async function main() {
   // Scene, Camera, Renderer
   const scene = new THREE.Scene();
@@ -34,16 +48,7 @@ async function main() {
   // Space background
   scene.background = new THREE.Color(0x000000);
 
-  // Earth setup (same as before)
-  const earthTexture = new THREE.TextureLoader().load('./8081_earthmap2k.jpg');
-  const earthNormalMap = new THREE.TextureLoader().load('https://threejs.org/examples/textures/earth_normal_2048.jpg');
-  const earthGeometry = new THREE.SphereGeometry(1, 32, 32);
-  const earthMaterial = new THREE.MeshStandardMaterial({
-    map: earthTexture,
-    normalMap: earthNormalMap,
-  });
-  const earth = new THREE.Mesh(earthGeometry, earthMaterial);
-  scene.add(earth);
+  const earth = add_earth(scene);
 
   add_lights(scene);
 
@@ -138,14 +143,13 @@ async function main() {
     });
 
     if (selectedComet) {
-      controls.enabled = false;
+      // controls.enabled = false;
       const cometPos = selectedComet.comet_object.position;
-      const offset = new THREE.Vector3(-3, 0, -5);
+      const offset = new THREE.Vector3(-0.5, 0, -0.5);
       const targetPos = cometPos.clone().add(offset);
-      camera.position.lerp(targetPos, 0.05);
+      camera.position.lerp(targetPos, 0.1);
 
-      const direction = new THREE.Vector3().subVectors(cometPos, camera.position).normalize();
-      camera.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, -1), direction);
+      camera.lookAt(cometPos);
     }
 
     time += 0.01;
