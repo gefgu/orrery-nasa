@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { calculateCometPosition, calculateOrbitPoints } from './kepler_orbit.js';  // Import the Kepler function
-import { getCometsData } from './comets_handler.ts';
+import { getCometsData } from './comets_handler.js';
 
 async function main() {
   // Scene, Camera, Renderer
@@ -20,7 +20,7 @@ async function main() {
   scene.background = spaceTexture;
 
   // Earth setup (same as before)
-  const earthTexture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/earth_atmos_2048.jpg');
+  const earthTexture = new THREE.TextureLoader().load('/8081_earthmap2k.jpg');
   const earthNormalMap = new THREE.TextureLoader().load('https://threejs.org/examples/textures/earth_normal_2048.jpg');
   const earthGeometry = new THREE.SphereGeometry(1, 32, 32);
   const earthMaterial = new THREE.MeshStandardMaterial({
