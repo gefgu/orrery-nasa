@@ -127,7 +127,11 @@ async function main() {
       // Update the story if the comet is being followed
       if (comet === selectedComet) {
         comet.timer += 0.01;
-        if (comet.timer >= 5) {
+
+        const textLength = selectedComet[`story_${comet.storyIndex}`]?.length || 0;
+        const duration = textLength * 0.05; // Adjust multiplier as needed
+
+        if (comet.timer >= duration) {
           comet.timer = 0;
           comet.storyIndex++;
           const storyKey = `story_${comet.storyIndex}`;
@@ -145,12 +149,10 @@ async function main() {
     });
 
     if (selectedComet) {
-      // controls.enabled = false;
       const cometPos = selectedComet.comet_object.position;
       const offset = new THREE.Vector3(-0.5, 0, -0.5);
       const targetPos = cometPos.clone().add(offset);
       camera.position.lerp(targetPos, 0.1);
-
       camera.lookAt(cometPos);
     }
 
