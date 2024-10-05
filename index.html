@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Three.js Orrery with Vite</title>
+    <base href="/orrery-nasa/" />
+    <!-- Replace with your actual GitHub repository name -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.155.0/build/three.module.js",
+          "three/examples/jsm/controls/OrbitControls": "https://unpkg.com/three@0.155.0/examples/jsm/controls/OrbitControls.js"
+        }
+      }
+    </script>
     <style>
       body {
         margin: 0;
