@@ -20,6 +20,7 @@ function initial_setup() {
   controls.update();
 
   add_lights(scene);
+  add_stars_background(scene);
 
   return { scene, camera, renderer, controls }
 }
@@ -50,6 +51,18 @@ function add_earth(scene) {
   const earth = new THREE.Mesh(earthGeometry, earthMaterial);
   scene.add(earth);
   return earth
+}
+
+function add_stars_background(scene) {
+  const starsGeometry = new THREE.BufferGeometry();
+  const starMaterial = new THREE.PointsMaterial({ color: 0xaaaaaa });
+  const starPositions = [];
+  for (let i = 0; i < 10000; i++) {
+    starPositions.push((Math.random() - 0.5) * 2000);
+  }
+  starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+  const stars = new THREE.Points(starsGeometry, starMaterial);
+  scene.add(stars);
 }
 
 

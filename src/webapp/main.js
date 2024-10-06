@@ -4,6 +4,13 @@ import { add_earth, initial_setup } from "./scene_setup.js";
 import { update_comet_pos, getComets } from "./comets_handler.js";
 import { handle_toggles } from './buttons_controller.js';
 import { handleCometClick, handleStory } from './story_handler.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { VignetteShader } from 'three/examples/jsm/shaders/VignetteShader.js';
+// import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
+
 
 function formatDate(daysElapsed) {
   const startDate = new Date("2024-10-06");  // Set simulation start date
@@ -17,6 +24,32 @@ async function main() {
   const { scene, camera, renderer, controls } = initial_setup();
   const earth = add_earth(scene);
   let comets = await getComets(scene);
+
+  // Post-processing Setup
+  const composer = new EffectComposer(renderer);
+  const renderPass = new RenderPass(scene, camera);
+  composer.addPass(renderPass);
+
+  // Bloom Effect
+  const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+  composer.addPass(bloomPass);
+
+  // Vignette Effect
+  const vignettePass = new ShaderPass(VignetteShader);
+  vignettePass.uniforms['offset'].value = 1.0;
+  vignettePass.uniforms['darkness'].value = 1.5;
+  composer.addPass(vignettePass);
+
+  // // Camera Tween Transition Example
+  // function moveCamera(newX, newY, newZ) {
+  //   new TWEEN.Tween(camera.position)
+  //     .to({ x: newX, y: newY, z: newZ }, 2000)
+  //     .easing(TWEEN.Easing.Cubic.InOut)
+  //     .onUpdate(() => camera.lookAt(scene.position))
+  //     .start();
+  // }
+
+
 
   // Handle mouse clicks
   window.addEventListener('click', (event) => handleCometClick(event, camera, comets));
@@ -62,6 +95,8 @@ async function main() {
     });
 
     controls.update();
+    // TWEEN.update(); // Update tweens
+    composer.render();
     renderer.render(scene, camera);
   }
 
