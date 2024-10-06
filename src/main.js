@@ -91,7 +91,7 @@ function create_comet(c, scene) {
         nameSprite.position.copy(object.position).add(new THREE.Vector3(0, 0.2, 0)); // Adjust Y value for height
 
         // Resolve the promise with comet data
-        resolve({ comet_object: object, nameSprite: nameSprite, orbitLine: null, ...c });
+        resolve({ comet_object: object, nameSprite: nameSprite, orbitLine: orbitLine, ...c });
       },
       undefined,
       (error) => {
