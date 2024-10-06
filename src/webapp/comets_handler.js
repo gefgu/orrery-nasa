@@ -36,9 +36,27 @@ function create_comet(c, scene) {
 
         // Create the comet's orbit line using calculated points
         const orbitPoints = calculateOrbitPoints(c);
+
+        // Create geometry from the calculated orbit points
         const orbitGeometry = new THREE.BufferGeometry().setFromPoints(orbitPoints);
-        const orbitMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+
+        // Holographic material using LineDashedMaterial
+        const orbitMaterial = new THREE.LineDashedMaterial({
+          color: 0x00ff00,       // Green holographic color
+          linewidth: 1,          // Line thickness
+          dashSize: 3,           // Length of the dash
+          gapSize: 0.1,            // Length of the gap between dashes
+          opacity: 0.6,          // Slightly transparent
+          transparent: true,     // Make the line transparent
+        });
+
+        // Create the line object using geometry and material
         const orbitLine = new THREE.Line(orbitGeometry, orbitMaterial);
+
+        // Compute the line's dashed segments (needed for LineDashedMaterial)
+        orbitLine.computeLineDistances();
+
+        // Add the orbit line to the scene
         scene.add(orbitLine);
 
         // Create a text sprite for the comet's object name
