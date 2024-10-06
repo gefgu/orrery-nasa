@@ -46,6 +46,12 @@ function create_comet(c, scene) {
         scene.add(nameSprite);
         // Position the text above the comet
         nameSprite.position.copy(object.position).add(new THREE.Vector3(0, 0.2, 0)); // Adjust Y value for height
+        const date = new Date("2024-10-06")
+        const cometPos = calculateCometPositionByDate(c, date.toDateString());
+        // Update the comet's 3D object and label position
+        object.position.copy(cometPos);
+        nameSprite.position.copy(cometPos).add(new THREE.Vector3(0, 0.05, 0));  // Adjust height for label
+
 
         // Resolve the promise with comet data
         resolve({ comet_object: object, nameSprite: nameSprite, orbitLine: orbitLine, ...c });
