@@ -29,7 +29,7 @@ function initial_setup() {
 
 function add_lights(scene) {
   // Lighting (same as before)
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
 
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -45,7 +45,7 @@ function add_earth(scene) {
   // Earth setup (same as before)
   const earthTexture = new THREE.TextureLoader().load('./8081_earthmap2k.jpg');
   const earthNormalMap = new THREE.TextureLoader().load('./2k_earth_normal_map');
-  const earthGeometry = new THREE.SphereGeometry(1, 32, 32);
+  const earthGeometry = new THREE.SphereGeometry(0.35, 256, 256);
   const earthMaterial = new THREE.MeshStandardMaterial({
     map: earthTexture,
     normalMap: earthNormalMap,
@@ -122,7 +122,7 @@ async function main() {
   ));
 
   // Camera positioning
-  camera.position.set(5, 3, 7);
+  camera.position.set(3, 2, 1);
   controls.update();
 
   // Raycaster and mouse for click detection
