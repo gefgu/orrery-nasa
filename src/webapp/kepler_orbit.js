@@ -91,7 +91,7 @@ function dateToJulianDate(date) {
 export function calculateCometPositionByDate(keplerParams, targetDate) {
   const { e, i_deg, w_deg, node_deg, q_au_1, p_yr, epochDate } = keplerParams;
 
-  console.log(keplerParams, targetDate)
+  // console.log(keplerParams, targetDate)
 
   // Convert the target date and epoch date to Julian dates
   const jdTarget = dateToJulianDate(new Date(targetDate));

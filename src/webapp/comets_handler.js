@@ -17,10 +17,14 @@ function create_comet(c, scene) {
   const loader = new OBJLoader();
   const grayMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 }); // Define gray material
 
+  // Generate a random number between 0 and 10
+  const random_number = Math.floor(Math.random() * 3); // Generates a number between 0 and 10
+  console.log(`./comet${random_number}.obj`);
+
   return new Promise((resolve, reject) => {
     // Load the 3D model
     loader.load(
-      './halley.obj', // Path to your OBJ file
+      `./comet${random_number}.obj`, // Path to your OBJ file
       (object) => {
         object.traverse((child) => {
           if (child.isMesh) {
@@ -28,7 +32,7 @@ function create_comet(c, scene) {
             child.material.needsUpdate = true; // Ensure the material is updated
           }
         });
-        object.scale.set(0.025, 0.025, 0.025); // Adjust the scale factors as needed (2 is just an example)
+        object.scale.set(0.005, 0.005, 0.005); // Adjust the scale factors as needed (2 is just an example)
 
         // Position the comet in the scene
         // object.position.set(10, 0, 0); // You may want to adjust this based on your needs
