@@ -1,3 +1,61 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#speed-slider-container {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+/* Spacey glowing text */
+.glow-text {
+  font-size: 24px;
+  color: #00ffcc;
+  text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+}
+
+/* Space-like slider appearance */
+#speed-slider {
+  -webkit-appearance: none;
+  width: 300px;
+  height: 6px;
+  background: linear-gradient(to right, #ff00cc, #00ffcc);
+  border-radius: 10px;
+  outline: none;
+  cursor: pointer;
+}
+
+#speed-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+#speed-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Labels for slider values */
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  color: #00ffcc;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.slider-labels span {
+  text-shadow: 0 0 5px #00ffcc;
+}

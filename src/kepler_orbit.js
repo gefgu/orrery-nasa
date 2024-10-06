@@ -55,7 +55,7 @@ export function calculateCometPosition(keplerParams, time) {
 
 
 // Function to generate the comet's orbit as a series of points
-export function calculateOrbitPoints(keplerParams, numPoints = 1000) {
+export function calculateOrbitPoints(keplerParams, numPoints = 5000) {
   const points = [];
 
   for (let i = 0; i <= numPoints; i++) {
