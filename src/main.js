@@ -13,8 +13,6 @@ async function main() {
   const earth = add_earth(scene);
 
   let comets = await getComets(scene);
-
-  let selectedComet = getSelectedComet();
   let originalCameraPosition = new THREE.Vector3();
 
   // Handle mouse clicks
