@@ -3,6 +3,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { calculateCometPosition, calculateOrbitPoints } from './kepler_orbit.js';  // Import the Kepler function
 import { getCometsData } from './comets_handler.js';
 import { createTextSprite } from "./texts_handler.js";
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+
 
 
 function initial_setup() {
@@ -40,7 +43,7 @@ function add_lights(scene) {
 function add_earth(scene) {
   // Earth setup (same as before)
   const earthTexture = new THREE.TextureLoader().load('./8081_earthmap2k.jpg');
-  const earthNormalMap = new THREE.TextureLoader().load('https://threejs.org/examples/textures/earth_normal_2048.jpg');
+  const earthNormalMap = new THREE.TextureLoader().load('./2k_earth_normal_map');
   const earthGeometry = new THREE.SphereGeometry(1, 32, 32);
   const earthMaterial = new THREE.MeshStandardMaterial({
     map: earthTexture,
@@ -51,29 +54,54 @@ function add_earth(scene) {
   return earth
 }
 
+// Modify the create_comet function to return a Promise
 function create_comet(c, scene) {
-  const cometGeometry = new THREE.SphereGeometry(0.1, 16, 16);
-  const cometMaterial = new THREE.MeshStandardMaterial({ color: 0xffd700 });
-  const comet = new THREE.Mesh(cometGeometry, cometMaterial);
+  const loader = new OBJLoader();
+  const grayMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 }); // Define gray material
 
-  // Add each comet to the scene
-  scene.add(comet);
+  return new Promise((resolve, reject) => {
+    // Load the 3D model
+    loader.load(
+      './halley.obj', // Path to your OBJ file
+      (object) => {
+        object.traverse((child) => {
+          if (child.isMesh) {
+            child.material = grayMaterial; // Apply gray material to the mesh
+            child.material.needsUpdate = true; // Ensure the material is updated
+          }
+        });
+        object.scale.set(0.025, 0.025, 0.025); // Adjust the scale factors as needed (2 is just an example)
 
-  // Create the comet's orbit line using calculated points
-  const orbitPoints = calculateOrbitPoints(c);
-  const orbitGeometry = new THREE.BufferGeometry().setFromPoints(orbitPoints);
-  const orbitMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-  const orbitLine = new THREE.Line(orbitGeometry, orbitMaterial);
-  scene.add(orbitLine);
+        // Position the comet in the scene
+        // object.position.set(10, 0, 0); // You may want to adjust this based on your needs
+        scene.add(object);
 
-  // Create a text sprite for the comet's object name
-  const nameSprite = createTextSprite(c.object_name); // Assume this function creates a text sprite
-  scene.add(nameSprite);
-  // Position the text above the comet
-  nameSprite.position.copy(comet.position).add(new THREE.Vector3(0, 0.2, 0)); // Adjust Y value for height
+        // Create the comet's orbit line using calculated points
+        const orbitPoints = calculateOrbitPoints(c);
+        const orbitGeometry = new THREE.BufferGeometry().setFromPoints(orbitPoints);
+        const orbitMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+        const orbitLine = new THREE.Line(orbitGeometry, orbitMaterial);
+        scene.add(orbitLine);
 
-  return { comet_object: comet, timer: 0, storyIndex: 0, showStory: false, nameSprite: nameSprite, orbitLine: orbitLine, ...c };
+        // Create a text sprite for the comet's object name
+        const nameSprite = createTextSprite(c.object_name); // Assume this function creates a text sprite
+        scene.add(nameSprite);
+        // Position the text above the comet
+        nameSprite.position.copy(object.position).add(new THREE.Vector3(0, 0.2, 0)); // Adjust Y value for height
+
+        // Resolve the promise with comet data
+        resolve({ comet_object: object, nameSprite: nameSprite, orbitLine: null, ...c });
+      },
+      undefined,
+      (error) => {
+        console.error('An error occurred while loading the OBJ model:', error);
+        reject(error); // Reject the promise on error
+      }
+    );
+  });
 }
+
+
 
 async function main() {
   // Scene, Camera, Renderer
@@ -82,9 +110,9 @@ async function main() {
   const earth = add_earth(scene);
 
   let comets_data = await getCometsData();
-  comets_data = comets_data.map((c) =>
+  comets_data = await Promise.all(comets_data.map((c) =>
     create_comet(c, scene)
-  );
+  ));
 
   // Camera positioning
   camera.position.set(5, 3, 7);
@@ -106,10 +134,16 @@ async function main() {
 
     raycaster.setFromCamera(mouse, camera);
 
-    const intersects = raycaster.intersectObjects(comets_data.map(c => c.comet_object));
-
+    const intersects = raycaster.intersectObjects(comets_data.map(c => c.comet_object), true);
     if (intersects.length > 0) {
-      const clickedComet = comets_data.find(c => c.comet_object === intersects[0].object);
+      const clickedObject = intersects[0].object;
+      // Check if the clicked object is a child of the comet object
+      const clickedComet = comets_data.find(c => {
+        // Check if the clicked object is among the children of the comet object
+        return c.comet_object.children.some(child => child.uuid === clickedObject.uuid);
+      });
+
+      console.log(comets_data, intersects[0].object);
 
       if (clickedComet && !selectedComet) {
         selectedComet = clickedComet;
@@ -176,7 +210,7 @@ async function main() {
 
     if (selectedComet) {
       const cometPos = selectedComet.comet_object.position;
-      const offset = new THREE.Vector3(-0.5, 0, -0.5);
+      const offset = new THREE.Vector3(-0.5, 0, -0.75);
       const targetPos = cometPos.clone().add(offset);
       camera.position.lerp(targetPos, 0.1);
       camera.lookAt(cometPos);

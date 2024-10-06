@@ -52,9 +52,9 @@ export function createNotificationSprite(message) {
 export function createTextSprite(text) {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
-  context.font = "24px Arial";
+  context.font = "18px Arial";
   context.fillStyle = "white";
-  context.fillText(text, 0, 24);
+  context.fillText(text, 0, 18);
   context.textAlign = 'center';  // Center-align the text horizontally
   context.textBaseline = 'middle';  // Center-align vertically
 
