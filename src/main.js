@@ -102,8 +102,10 @@ function create_comet(c, scene) {
   });
 }
 
-function update_comet() {
-
+function update_comet_pos(comet, time) {
+  const cometPos = calculateCometPosition(comet, time);
+  comet.comet_object.position.copy(cometPos);
+  comet.nameSprite.position.copy(cometPos).add(new THREE.Vector3(0, 0.05, 0)); // Adjust Y value for height
 }
 
 
@@ -128,9 +130,6 @@ async function main() {
   const mouse = new THREE.Vector2();
   let selectedComet = null;
   let originalCameraPosition = new THREE.Vector3();
-
-  // Time variable for orbit calculation
-  let time = 0;
 
   // Handle mouse clicks
   window.addEventListener('click', (event) => {
@@ -178,17 +177,33 @@ async function main() {
     });
   });
 
+  // Time variable for orbit calculation
+  let time = 0;
+  let lastTime = performance.now();
+  let speedFactor = 10;  // Initial speed value (10 days/sec)
+
+  // Handle slider changes
+  const speedSlider = document.getElementById('speed-slider');
+
+  speedSlider.addEventListener('input', (event) => {
+    speedFactor = parseInt(event.target.value, 10);  // Get the speed factor from 
+  });
+
   function animate() {
     requestAnimationFrame(animate);
+
+    const currentTime = performance.now();
+    const deltaTime = (currentTime - lastTime) / 10000;  // Time since last frame in seconds
+    lastTime = currentTime;
+
+    // Update the time based on speed factor (days/sec)
+    time += speedFactor * deltaTime;  // Adjusting time progression
 
     // Rotate Earth
     earth.rotation.y += 0.005;
 
     comets_data.forEach((comet) => {
-      const cometPos = calculateCometPosition(comet, time);
-      comet.comet_object.position.copy(cometPos);
-      comet.nameSprite.position.copy(cometPos).add(new THREE.Vector3(0, 0.05, 0)); // Adjust Y value for height
-
+      update_comet_pos(comet, time);
       // Update the story if the comet is being followed
       if (comet === selectedComet) {
         comet.timer += 0.01;
