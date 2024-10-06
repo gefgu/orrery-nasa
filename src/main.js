@@ -5,6 +5,7 @@ import { getCometsData } from './comets_handler.js';
 import { createTextSprite } from "./texts_handler.js";
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+import { setup_slider } from "./slider_controller.js"
 
 
 
@@ -99,6 +100,10 @@ function create_comet(c, scene) {
       }
     );
   });
+}
+
+function update_comet() {
+
 }
 
 
@@ -229,5 +234,7 @@ async function main() {
     camera.updateProjectionMatrix();
   });
 }
+
+setup_slider();
 
 main();
