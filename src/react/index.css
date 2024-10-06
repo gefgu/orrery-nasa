@@ -1,0 +1,31 @@
+
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  
+}
+
+:root {
+  --primary:  #1e1245;
+  --secundary: #0c074f;
+  --terciary: #060035;
+  --white: #f2eff6;
+  --purpledark: #6923a1;
+  --red: #c7266a;
+  --orange: #c13e5e;
+  --black: #0000;
+  --gray: #8a8a8a;
+
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body{
+  background-color: #f6e9ee;
+}

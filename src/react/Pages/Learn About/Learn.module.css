@@ -1,0 +1,42 @@
+.learnabout {
+    color: var(--red);
+}
+
+.contentWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    text-align: justify;
+}
+
+.textContent {
+    flex: 1;
+    padding-right: 20px;
+    text-align: justify;
+}
+
+.lottieAnimation {
+    flex: 1; /* A animação ocupará a outra metade do espaço */
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .contentWrapper {
+        flex-direction: column; /* Em telas menores, os elementos serão empilhados */
+        align-items: center;
+        padding: 20px; /* Adicionando padding para dar mais espaçamento */
+    }
+
+    .textContent {
+        padding-right: 0; /* Remover padding direito em telas menores */
+        text-align: justify;
+    }
+
+    .lottieAnimation {
+        width: 100%; /* A animação ocupará 100% da largura */
+        max-width: 300px; /* Limitar a largura máxima da animação em telas menores */
+        margin-top: 20px; /* Espaçamento entre o texto e a animação */
+    }
+}
