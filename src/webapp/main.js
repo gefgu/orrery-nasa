@@ -40,17 +40,6 @@ async function main() {
   vignettePass.uniforms['darkness'].value = 1.5;
   composer.addPass(vignettePass);
 
-  // // Camera Tween Transition Example
-  // function moveCamera(newX, newY, newZ) {
-  //   new TWEEN.Tween(camera.position)
-  //     .to({ x: newX, y: newY, z: newZ }, 2000)
-  //     .easing(TWEEN.Easing.Cubic.InOut)
-  //     .onUpdate(() => camera.lookAt(scene.position))
-  //     .start();
-  // }
-
-
-
   // Handle mouse clicks
   window.addEventListener('click', (event) => handleCometClick(event, camera, comets));
   // Attach the Exit Story button click event

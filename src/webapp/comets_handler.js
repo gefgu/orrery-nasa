@@ -34,7 +34,7 @@ function create_comet(c, scene) {
             child.material.needsUpdate = true; // Ensure the material is updated
           }
         });
-        object.scale.set(0.005, 0.005, 0.005); // Adjust the scale factors as needed (2 is just an example)
+        object.scale.set(0.01, 0.01, 0.01); // Adjust the scale factors as needed (2 is just an example)
 
         // Position the comet in the scene
         // object.position.set(10, 0, 0); // You may want to adjust this based on your needs
