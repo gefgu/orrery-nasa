@@ -5,7 +5,7 @@ function Project() {
       <Header></Header>
       <iframe
         src="./webapp.html"
-        style={{ width: "100%", height: "100vh", border: "none" }}
+        style={{ width: "100%", height: "95%", border: "none" }}
         title="WebApp"
       />
     </>

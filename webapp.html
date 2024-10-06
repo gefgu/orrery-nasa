@@ -15,24 +15,16 @@
     <link href="/src/styles/style.css" rel="stylesheet" />
   </head>
   <body class="bg-black">
-    <div
-      id="comet-story"
-      class="absolute top-10 left-10 p-5 bg-black/70 text-white font-sans rounded-lg hidden w-lg text-center max-w-lg border border-gray-50 text-xl"
-    >
+    <div id="comet-story" class="comet-story-container">
       <p id="story-text"></p>
     </div>
 
     <!-- Centered controls div -->
-    <div
-      class="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-4 justify-between w-[360px]"
-    >
-      <button id="toggle-labels" class="p-2 bg-blue-500 text-white rounded">
+    <div class="controls-container">
+      <button id="toggle-labels" class="control-button blue-button">
         Toggle Labels
       </button>
-      <button
-        id="toggle-trajectories"
-        class="p-2 bg-green-500 text-white rounded"
-      >
+      <button id="toggle-trajectories" class="control-button green-button">
         Toggle Trajectories
       </button>
       <!-- Speed control slider with space feel -->
