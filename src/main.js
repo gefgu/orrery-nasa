@@ -72,7 +72,7 @@ function create_comet(c, scene) {
   // Position the text above the comet
   nameSprite.position.copy(comet.position).add(new THREE.Vector3(0, 0.2, 0)); // Adjust Y value for height
 
-  return { comet_object: comet, timer: 0, storyIndex: 0, showStory: false, nameSprite: nameSprite, ...c };
+  return { comet_object: comet, timer: 0, storyIndex: 0, showStory: false, nameSprite: nameSprite, orbitLine: orbitLine, ...c };
 }
 
 async function main() {
@@ -123,6 +123,20 @@ async function main() {
         document.getElementById('story-text').innerText = selectedComet.story_0;
       }
     }
+  });
+
+  // Toggle labels
+  document.getElementById('toggle-labels').addEventListener('click', () => {
+    comets_data.forEach(comet => {
+      comet.nameSprite.visible = !comet.nameSprite.visible; // Toggle visibility
+    });
+  });
+
+  // Toggle trajectories
+  document.getElementById('toggle-trajectories').addEventListener('click', () => {
+    comets_data.forEach(comet => {
+      comet.orbitLine.visible = !comet.orbitLine.visible; // Toggle visibility
+    });
   });
 
   function animate() {
