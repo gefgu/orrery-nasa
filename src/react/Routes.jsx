@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home";
 import LearnAbout from "./Pages/Learn About";
 import Project from "./Pages/Project";
+import Rogue from "./Pages/Rogue";
 
 function AppRoutes() {
   return (
@@ -12,6 +13,7 @@ function AppRoutes() {
           {" "}
         </Route>
         <Route path="/Project" element={<Project />}></Route>
+        <Route path="/Rogue" element={<Rogue />}></Route>
       </Routes>
     </BrowserRouter>
   );
