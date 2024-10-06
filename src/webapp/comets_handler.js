@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { calculateOrbitPoints, calculateCometPosition } from './kepler_orbit.js';  // Import the Kepler function
+import { calculateOrbitPoints, calculateCometPosition, calculateCometPositionByDate } from './kepler_orbit.js';  // Import the Kepler function
 import { createTextSprite } from "./texts_handler.js";
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 
@@ -60,10 +60,17 @@ function create_comet(c, scene) {
 }
 
 function update_comet_pos(comet, time) {
-  const cometPos = calculateCometPosition(comet, time);
+  // Convert simulation time (days) to years
+  const timeInYears = time / 365.25;
+
+  // Calculate comet position with respect to its orbital period
+  const cometPos = calculateCometPosition(comet, timeInYears);
+
+  // Update the comet's 3D object and label position
   comet.comet_object.position.copy(cometPos);
-  comet.nameSprite.position.copy(cometPos).add(new THREE.Vector3(0, 0.05, 0)); // Adjust Y value for height
+  comet.nameSprite.position.copy(cometPos).add(new THREE.Vector3(0, 0.05, 0));  // Adjust height for label
 }
+
 
 
 

@@ -6,7 +6,7 @@ import { handle_toggles } from './buttons_controller.js';
 import { handleCometClick, handleStory } from './story_handler.js';
 
 function formatDate(daysElapsed) {
-  const startDate = new Date("2024-01-01");  // Set simulation start date
+  const startDate = new Date("2024-10-06");  // Set simulation start date
   const currentDate = new Date(startDate);
   currentDate.setDate(startDate.getDate() + daysElapsed); // Add elapsed days to the start date
   return currentDate.toDateString();
@@ -25,11 +25,11 @@ async function main() {
   // Time variables
   let time = 0;
   let lastTime = performance.now();
-  let speedFactor = 10;  // Initial speed value (10 days/sec)
 
   // Elements to display date and speed
   const dateDisplay = document.getElementById('date-display');
   const speedDisplay = document.getElementById('speed-display');
+  let speedFactor = 1;  // Initial speed value (1 days/sec)
 
   // Handle slider changes
   const speedSlider = document.getElementById('speed-slider');
