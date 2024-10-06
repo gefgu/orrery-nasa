@@ -90,7 +90,7 @@ async function main() {
     dateDisplay.textContent = formatDate(Math.floor(daysElapsed));
 
     // Rotate Earth
-    earth.rotation.y += 0.005;
+    earth.rotation.y += 0.005 * speedFactor;
 
     // Update comet positions and handle the story for each comet
     comets.forEach((comet) => {

@@ -3,6 +3,8 @@ import { calculateOrbitPoints, calculateCometPosition, calculateCometPositionByD
 import { createTextSprite } from "./texts_handler.js";
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 
+const name_sprite_distance = 0.001;
+
 async function getComets(scene) {
   const response = await fetch("./comets.json");
   let comets = await response.json(); // Parse JSON
@@ -49,34 +51,48 @@ function create_comet(c, scene) {
           color: 0x00ff00,       // Green holographic color
           linewidth: 1,          // Line thickness
           dashSize: 3,           // Length of the dash
-          gapSize: 0.1,            // Length of the gap between dashes
+          gapSize: 0.1,          // Length of the gap between dashes
           opacity: 0.6,          // Slightly transparent
           transparent: true,     // Make the line transparent
+          emissive: 0x00ff00,    // Add a glow-like effect
+          emissiveIntensity: 1,  // Make the glow brighter
         });
 
         // Create the line object using geometry and material
         const orbitLine = new THREE.Line(orbitGeometry, orbitMaterial);
 
-        // Compute the line's dashed segments (needed for LineDashedMaterial)
-        orbitLine.computeLineDistances();
+        // Add glow effect by creating an outer line with slightly bigger thickness
+        const outerGlowMaterial = new THREE.LineBasicMaterial({
+          color: 0x00ff00,
+          opacity: 0.3,          // More transparent to act like glow
+          transparent: true,
+          linewidth: 3,          // Thicker to create the glow effect
+        });
 
-        // Add the orbit line to the scene
+        // Create a glow line
+        const glowLine = new THREE.Line(orbitGeometry, outerGlowMaterial);
+
+        // Add both the orbit line and the glow line to the scene
+        scene.add(glowLine);
         scene.add(orbitLine);
+
+        // To enable dashes on the orbit line, call this function after adding to the scene
+        orbitLine.computeLineDistances();
 
         // Create a text sprite for the comet's object name
         const nameSprite = createTextSprite(c.object_name); // Assume this function creates a text sprite
         scene.add(nameSprite);
         // Position the text above the comet
-        nameSprite.position.copy(object.position).add(new THREE.Vector3(0, 0.2, 0)); // Adjust Y value for height
+        nameSprite.position.copy(object.position).add(new THREE.Vector3(0, 0.001, 0)); // Adjust Y value for height
         const date = new Date("2024-10-06")
         const cometPos = calculateCometPositionByDate(c, date.toDateString());
         // Update the comet's 3D object and label position
         object.position.copy(cometPos);
-        nameSprite.position.copy(cometPos).add(new THREE.Vector3(0, 0.05, 0));  // Adjust height for label
+        nameSprite.position.copy(cometPos).add(new THREE.Vector3(0, name_sprite_distance, 0));  // Adjust height for label
 
 
         // Resolve the promise with comet data
-        resolve({ comet_object: object, nameSprite: nameSprite, orbitLine: orbitLine, ...c });
+        resolve({ comet_object: object, nameSprite: nameSprite, orbitLine: orbitLine, glowLine: glowLine, ...c });
       },
       undefined,
       (error) => {
@@ -96,7 +112,7 @@ function update_comet_pos(comet, time) {
 
   // Update the comet's 3D object and label position
   comet.comet_object.position.copy(cometPos);
-  comet.nameSprite.position.copy(cometPos).add(new THREE.Vector3(0, 0.05, 0));  // Adjust height for label
+  comet.nameSprite.position.copy(cometPos).add(new THREE.Vector3(0, name_sprite_distance, 0));  // Adjust height for label
 }
 
 

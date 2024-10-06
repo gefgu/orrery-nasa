@@ -67,7 +67,7 @@ export function handleStory(comet, camera) {
     }
 
     const cometPos = selectedComet.comet_object.position;
-    const offset = new THREE.Vector3(-0.5, 0, -0.75);
+    const offset = new THREE.Vector3(-0.2, 0, -0.3);
     const targetPos = cometPos.clone().add(offset);
     camera.position.lerp(targetPos, 0.1);
     camera.lookAt(cometPos);

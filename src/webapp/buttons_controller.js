@@ -10,6 +10,7 @@ function handle_toggles(comets) {
   document.getElementById('toggle-trajectories').addEventListener('click', () => {
     comets.forEach(comet => {
       comet.orbitLine.visible = !comet.orbitLine.visible; // Toggle visibility
+      comet.glowLine.visible = !comet.glowLine.visible; // Toggle visibility
     });
   });
 
@@ -21,6 +22,7 @@ function handle_toggles(comets) {
         comet.comet_object.visible = !comet.comet_object.visible; // Toggle visibility
         comet.nameSprite.visible = !comet.nameSprite.visible; // Toggle visibility
         comet.orbitLine.visible = !comet.orbitLine.visible; // Toggle visibility
+        comet.glowLine.visible = !comet.glowLine.visible; // Toggle visibility
       }
     });
   });
