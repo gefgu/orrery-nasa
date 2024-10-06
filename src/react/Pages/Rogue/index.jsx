@@ -43,13 +43,13 @@ function Rogue() {
           <h2>Technology in Action: Rogue Space Systems</h2>
           <p style={{ fontSize: 18, lineHeight: 1.5 }}>
             Rogue Space Systems Corporation has developed an easy-to-use,
-            interactive technology that tracks these space objects. Using the
-            [Sky](https://sky.rogue.space/?intldes=1963-039C) platform, it is
-            possible to monitor the orbit of satellites, rocket stages and other
-            debris with precision, allowing users to follow the movement of
-            these bodies, as well as their names. This system offers a powerful
-            and affordable solution to help raise awareness about space debris
-            and develop mitigation strategies.
+            interactive technology that tracks these space objects. Using the{" "}
+            <a href="https://sky.rogue.space/?intldes=1963-039C">Sky</a>
+            platform, it is possible to monitor the orbit of satellites, rocket
+            stages and other debris with precision, allowing users to follow the
+            movement of these bodies, as well as their names. This system offers
+            a powerful and affordable solution to help raise awareness about
+            space debris and develop mitigation strategies.
           </p>
           <p style={{ fontSize: 18, lineHeight: 1.5 }}>
             Rogue Space Systems' innovation and commitment are paving the way
