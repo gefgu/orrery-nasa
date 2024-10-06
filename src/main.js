@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { setup_slider } from "./slider_controller.js"
 import { add_earth, initial_setup } from "./scene_setup.js"
 import { create_comet, update_comet_pos, getComets } from "./comets_handler.js"
+import { handle_toggles } from './buttons_controller.js';
 
 
 async function main() {
@@ -52,19 +53,8 @@ async function main() {
     }
   });
 
-  // Toggle labels
-  document.getElementById('toggle-labels').addEventListener('click', () => {
-    comets.forEach(comet => {
-      comet.nameSprite.visible = !comet.nameSprite.visible; // Toggle visibility
-    });
-  });
+  handle_toggles(comets);
 
-  // Toggle trajectories
-  document.getElementById('toggle-trajectories').addEventListener('click', () => {
-    comets.forEach(comet => {
-      comet.orbitLine.visible = !comet.orbitLine.visible; // Toggle visibility
-    });
-  });
 
   // Time variable for orbit calculation
   let time = 0;
