@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 // Helper function to create text sprite
-export function createTextSprite(message) {
+export function createNotificationSprite(message) {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
   const fontSize = 18;  // Font size
@@ -48,3 +48,24 @@ export function createTextSprite(message) {
   return sprite;
 }
 
+
+export function createTextSprite(text) {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  context.font = "24px Arial";
+  context.fillStyle = "white";
+  context.fillText(text, 0, 24);
+  context.textAlign = 'center';  // Center-align the text horizontally
+  context.textBaseline = 'middle';  // Center-align vertically
+
+  const texture = new THREE.Texture(canvas);
+  texture.needsUpdate = true;
+
+  const spriteMaterial = new THREE.SpriteMaterial({ map: texture, depthTest: false });
+  const sprite = new THREE.Sprite(spriteMaterial);
+
+  // Set the size of the sprite
+  sprite.scale.set(1, 0.5, 1); // Adjust based on desired size
+
+  return sprite;
+}

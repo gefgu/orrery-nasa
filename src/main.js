@@ -66,7 +66,13 @@ function create_comet(c, scene) {
   const orbitLine = new THREE.Line(orbitGeometry, orbitMaterial);
   scene.add(orbitLine);
 
-  return { comet_object: comet, timer: 0, storyIndex: 0, showStory: false, ...c };
+  // Create a text sprite for the comet's object name
+  const nameSprite = createTextSprite(c.object_name); // Assume this function creates a text sprite
+  scene.add(nameSprite);
+  // Position the text above the comet
+  nameSprite.position.copy(comet.position).add(new THREE.Vector3(0, 0.2, 0)); // Adjust Y value for height
+
+  return { comet_object: comet, timer: 0, storyIndex: 0, showStory: false, nameSprite: nameSprite, ...c };
 }
 
 async function main() {
@@ -128,6 +134,7 @@ async function main() {
     comets_data.forEach((comet) => {
       const cometPos = calculateCometPosition(comet, time);
       comet.comet_object.position.copy(cometPos);
+      comet.nameSprite.position.copy(cometPos).add(new THREE.Vector3(0, 0.05, 0)); // Adjust Y value for height
 
       // Update the story if the comet is being followed
       if (comet === selectedComet) {
