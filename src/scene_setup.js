@@ -15,6 +15,10 @@ function initial_setup() {
   // Space background
   scene.background = new THREE.Color(0x000000);
 
+  // Camera positioning
+  camera.position.set(3, 2, 1);
+  controls.update();
+
   add_lights(scene);
 
   return { scene, camera, renderer, controls }

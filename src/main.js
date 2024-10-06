@@ -3,6 +3,7 @@ import { setup_slider } from "./slider_controller.js"
 import { add_earth, initial_setup } from "./scene_setup.js"
 import { create_comet, update_comet_pos, getComets } from "./comets_handler.js"
 import { handle_toggles } from './buttons_controller.js';
+import { getSelectedComet, handleCometClick } from './clicksHandler.js';
 
 
 async function main() {
@@ -13,45 +14,11 @@ async function main() {
 
   let comets = await getComets(scene);
 
-  // Camera positioning
-  camera.position.set(3, 2, 1);
-  controls.update();
-
-  // Raycaster and mouse for click detection
-  const raycaster = new THREE.Raycaster();
-  const mouse = new THREE.Vector2();
-  let selectedComet = null;
+  let selectedComet = getSelectedComet();
   let originalCameraPosition = new THREE.Vector3();
 
   // Handle mouse clicks
-  window.addEventListener('click', (event) => {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    raycaster.setFromCamera(mouse, camera);
-
-    const intersects = raycaster.intersectObjects(comets.map(c => c.comet_object), true);
-    if (intersects.length > 0) {
-      const clickedObject = intersects[0].object;
-      // Check if the clicked object is a child of the comet object
-      const clickedComet = comets.find(c => {
-        // Check if the clicked object is among the children of the comet object
-        return c.comet_object.children.some(child => child.uuid === clickedObject.uuid);
-      });
-
-      if (clickedComet && !selectedComet) {
-        selectedComet = clickedComet;
-        originalCameraPosition.copy(camera.position);
-        selectedComet.storyIndex = 0;
-        selectedComet.timer = 0;
-        selectedComet.showStory = true;
-
-        // Show and update the story div
-        document.getElementById('comet-story').style.display = 'block';
-        document.getElementById('story-text').innerText = selectedComet.story_0;
-      }
-    }
-  });
+  window.addEventListener('click', (event) => handleCometClick(event, camera, comets));
 
   handle_toggles(comets);
 
@@ -70,6 +37,7 @@ async function main() {
 
   function animate() {
     requestAnimationFrame(animate);
+    let selectedComet = getSelectedComet();
 
     const currentTime = performance.now();
     const deltaTime = (currentTime - lastTime) / 10000;  // Time since last frame in seconds
@@ -115,7 +83,6 @@ async function main() {
       camera.lookAt(cometPos);
     }
 
-    time += 0.01;
     controls.update();
     renderer.render(scene, camera);
   }
