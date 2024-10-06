@@ -3,7 +3,7 @@ import { setup_slider } from "./slider_controller.js";
 import { add_earth, initial_setup } from "./scene_setup.js";
 import { update_comet_pos, getComets } from "./comets_handler.js";
 import { handle_toggles } from './buttons_controller.js';
-import { handleCometClick, handleStory } from './story_handler.js';
+import { exitStoryMode, handleCometClick, handleStory } from './story_handler.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
@@ -53,6 +53,10 @@ async function main() {
 
   // Handle mouse clicks
   window.addEventListener('click', (event) => handleCometClick(event, camera, comets));
+  // Attach the Exit Story button click event
+  document.getElementById('exit-story').addEventListener('click', () =>
+    exitStoryMode(camera)
+  );
   handle_toggles(comets);
 
   // Time variables
@@ -107,6 +111,8 @@ async function main() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
   });
+
+
 }
 
 setup_slider();

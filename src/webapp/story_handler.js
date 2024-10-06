@@ -32,6 +32,8 @@ export function handleCometClick(event, camera, comets) {
       // Show and update the story div
       document.getElementById('comet-story').style.display = 'block';
       document.getElementById('story-text').innerText = selectedComet.story_0;
+      // Show the Exit Story button
+      document.getElementById('exit-story').style.display = 'block';
     }
   }
 }
@@ -71,3 +73,14 @@ export function handleStory(comet, camera) {
     camera.lookAt(cometPos);
   }
 }
+
+export function exitStoryMode(camera) {
+  // Reset everything
+  selectedComet = null;
+  document.getElementById('comet-story').style.display = 'none';
+  document.getElementById('exit-story').style.display = 'none';
+
+  // Reset the camera position
+  camera.position.copy(originalCameraPosition);
+}
+
