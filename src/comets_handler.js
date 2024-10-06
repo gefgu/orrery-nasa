@@ -3,9 +3,12 @@ import { calculateCometPosition, calculateOrbitPoints } from './kepler_orbit.js'
 import { createTextSprite } from "./texts_handler.js";
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 
-async function getCometsData() {
+async function getComets(scene) {
   const response = await fetch("./comets.json");
-  const comets = await response.json(); // Parse JSON
+  let comets = await response.json(); // Parse JSON
+  comets = await Promise.all(comets.map((c) =>
+    create_comet(c, scene)
+  ));
   return comets;
 }
 
@@ -63,4 +66,4 @@ function update_comet_pos(comet, time) {
 }
 
 
-export { update_comet_pos, create_comet, getCometsData }
+export { update_comet_pos, create_comet, getComets }

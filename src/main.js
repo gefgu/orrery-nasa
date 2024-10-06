@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { setup_slider } from "./slider_controller.js"
 import { add_earth, initial_setup } from "./scene_setup.js"
-import { create_comet, update_comet_pos, getCometsData } from "./comets_handler.js"
+import { create_comet, update_comet_pos, getComets } from "./comets_handler.js"
 
 
 async function main() {
@@ -10,10 +10,7 @@ async function main() {
 
   const earth = add_earth(scene);
 
-  let comets_data = await getCometsData();
-  comets_data = await Promise.all(comets_data.map((c) =>
-    create_comet(c, scene)
-  ));
+  let comets = await getComets(scene);
 
   // Camera positioning
   camera.position.set(3, 2, 1);
@@ -32,16 +29,14 @@ async function main() {
 
     raycaster.setFromCamera(mouse, camera);
 
-    const intersects = raycaster.intersectObjects(comets_data.map(c => c.comet_object), true);
+    const intersects = raycaster.intersectObjects(comets.map(c => c.comet_object), true);
     if (intersects.length > 0) {
       const clickedObject = intersects[0].object;
       // Check if the clicked object is a child of the comet object
-      const clickedComet = comets_data.find(c => {
+      const clickedComet = comets.find(c => {
         // Check if the clicked object is among the children of the comet object
         return c.comet_object.children.some(child => child.uuid === clickedObject.uuid);
       });
-
-      console.log(comets_data, intersects[0].object);
 
       if (clickedComet && !selectedComet) {
         selectedComet = clickedComet;
@@ -59,14 +54,14 @@ async function main() {
 
   // Toggle labels
   document.getElementById('toggle-labels').addEventListener('click', () => {
-    comets_data.forEach(comet => {
+    comets.forEach(comet => {
       comet.nameSprite.visible = !comet.nameSprite.visible; // Toggle visibility
     });
   });
 
   // Toggle trajectories
   document.getElementById('toggle-trajectories').addEventListener('click', () => {
-    comets_data.forEach(comet => {
+    comets.forEach(comet => {
       comet.orbitLine.visible = !comet.orbitLine.visible; // Toggle visibility
     });
   });
@@ -96,7 +91,7 @@ async function main() {
     // Rotate Earth
     earth.rotation.y += 0.005;
 
-    comets_data.forEach((comet) => {
+    comets.forEach((comet) => {
       update_comet_pos(comet, time);
       // Update the story if the comet is being followed
       if (comet === selectedComet) {
