@@ -17,8 +17,8 @@ function App() {
 
   return (
     <div style={{ height: "100%" }}>
-      {/* {loading ? <Loader /> : <AppRoutes />} */}
-      <AppRoutes />
+      {loading ? <Loader /> : <AppRoutes />}
+      {/* <AppRoutes /> */}
     </div>
   );
 }
