@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpaceWalkers</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.155.0/build/three.module.js",
+          "three/examples/jsm/controls/OrbitControls": "https://unpkg.com/three@0.155.0/examples/jsm/controls/OrbitControls.js"
+        }
+      }
+    </script>
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body class="bg-black">
+    <div id="comet-story" class="comet-story-container">
+      <p id="story-text"></p>
+    </div>
+
+    <!-- Centered controls div -->
+    <div class="controls-container">
+      <button id="toggle-labels" class="control-button blue-button">
+        Toggle Labels
+      </button>
+      <button id="toggle-trajectories" class="control-button green-button">
+        Toggle Trajectories
+      </button>
+      <!-- Speed control slider with space feel -->
+      <div id="speed-slider-container">
+        <div id="date-display" class="glow-text"></div>
+
+        <!-- Speed display text -->
+        <div id="speed-display" class="glow-text">Stopped (0 days/sec)</div>
+
+        <input
+          type="range"
+          id="speed-slider"
+          min="-100"
+          max="100"
+          value="10"
+          step="1"
+        />
+
+        <!-- Labels for speed slider -->
+        <div class="slider-labels">
+          <span>-100 days/sec</span>
+          <span>Pause</span>
+          <span>100 days/sec</span>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./src/webapp/main.js"></script>
+  </body>
+</html>
